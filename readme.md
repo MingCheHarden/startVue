@@ -4,10 +4,15 @@
 
 ## 入坑导言
 
-    说实话Vue的概念挺多的，而且官方文档解释的肯定比我详细，比我理解的深... ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄
-    想要这次的分享让大家收获比较多的东西，我打算从两个示例入手。第一个，目的是入门，展示下如何编写一个Vue组件；第二个，稍微增加下条件，看看使用Vue的思维，如何构建一个项目。
+说实话 Vue 的概念挺多的，而且[官方文档](https://cn.vuejs.org/v2/guide/installation.html)解释的肯定比我详细，比我理解的深... ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄
 
-    下面是这两个示例，想要表达的核心概念，先顺一眼，带着疑问。
+想要这次的分享让大家收获比较多的东西，我打算从两个示例入手。
+
+第一个，目的是入门，展示下如何编写一个 Vue 组件；
+
+第二个，稍微增加下条件，看看使用 Vue 的思维，如何构建一个项目。
+
+下面是这两个示例想要表达的 Vue 核心概念，我们先不用纠结这些概念，看完两个例子，我们再回头来看。
 
 ## 一个.vue 文件组件
 
@@ -15,19 +20,25 @@
 
 1. 模板语法
 
-2. 条件渲染与列表渲染
+2. 指令
 
-3. 指令
-
-   v-bind、v-on
+   v-bind、v-on、v-if、v-show
 
 ### script
 
 1. 何为 MVVM ？
 
-1. 生命周期
+1. [生命周期](https://cn.vuejs.org/v2/guide/instance.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%9B%BE%E7%A4%BA)
 
-1. 数据跟踪（响应式原理）
+   (1) created
+
+   (2) mounted
+
+   (3) updated
+
+   (4) destroy
+
+1. [数据跟踪（响应式原理）](https://cn.vuejs.org/v2/guide/reactivity.html)
 
    (1) data
 
@@ -35,13 +46,11 @@
 
    (3) watch
 
-1. 单向数据流，状态管理
+1. 单向数据流
 
    (1) props
 
    (2) $emit
-
-   (3) Vuex
 
 ## 例子 1：倒计时
 
@@ -56,6 +65,8 @@
    ```html
     <template>
     <div id="counting-down">
+    <!-- {{ x }} “Mustache”语法 (双大括号) -->
+    <!-- Mustache 标签将会被替代为对应数据对象上 remainTime 属性的值。无论何时，绑定的数据对象上 remainTime 属性发生了改变，插值处的内容都会更新。 -->
         <h1>比赛剩余时间:{{remainTime}}</h1>
     </div>
     </template>
@@ -73,6 +84,7 @@
     },
     methods: {},
     mounted() {
+        //生命周期，装载。当template最外层，装载到dom上时触发，不能保证子组件都装载。我们这个例子没有子组件，就可以把这个生命钩子当做，dom已经准备好了。
         setInterval(() => {
             this.remainTime > 0 ? this.remainTime-- : 0;
         }, 1000);
@@ -110,8 +122,6 @@
        子: 倒计时+裁判
 
    (2) 建立 Model，并且定义数据的流动。
-
-   比赛状态、倒计时时间
 
    Vue 的单项数据流规定
 
@@ -230,6 +240,7 @@
        },
        methods: {
            assignTime(time) {
+               //当调整时间的button被点击是，触发比赛组件定义在当前组件上的assignTime事件，注入time参数，触发回调
                this.$emit("assignTime", time);
            },
            controlBtnClick(state) {
@@ -261,3 +272,9 @@
        props: ["totalTime", "remainTime", "matchState"] //从父组件传过来的值
    };
    ```
+
+## 高阶
+
+1. [状态管理](https://cn.vuejs.org/v2/guide/state-management.html)
+
+   Vuex
