@@ -1,20 +1,13 @@
-# Vue 分享
+# 欢迎入坑 Vue
 
-## 前端基础
+Hi~ o(_￣ ▽ ￣_)ブ
 
-1. HTML
+## 入坑导言
 
-   (1) 语法不区分大小写
+    说实话Vue的概念挺多的，而且官方文档解释的肯定比我详细，比我理解的深... ⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄
+    想要这次的分享让大家收获比较多的东西，我打算从两个示例入手。第一个，目的是入门，展示下如何编写一个Vue组件；第二个，稍微增加下条件，看看使用Vue的思维，如何构建一个项目。
 
-   (2)
-
-2. CSS
-
-   (1) flex
-
-   (2) 盒模型
-
-3. JavaScript
+    下面是这两个示例，想要表达的核心概念，先顺一眼，带着疑问。
 
 ## 一个.vue 文件组件
 
@@ -50,17 +43,13 @@
 
    (3) Vuex
 
-### style
-
 ## 例子 1：倒计时
 
 1. 描述：
 
    现有一个比赛（嗯... 不知道啥比赛），比赛时间为 60s，比赛时间减为 0 时，比赛结束。
 
-2. 页面： ./countingDown.html
-
-3. 代码：
+2. 代码：
 
    (1) template
 
@@ -93,12 +82,11 @@
    </script>
    ```
 
-4. 知识点
+3. 知识点
 
    （1） 响应式系统
 
-          data中的remainTime，在vue实例化的时候会被监听setter和getter。
-          也就是说，在template中使用了remainTime，这时getter操作会将remainTime记录为template的依赖；而在脚本改变remainTime值时（setInterval），setter操作发起通知，vue接收到通知，便根据getter收集到的依赖树，通知相应的依赖更新，再触发template的重新渲染。
+   data 中的 remainTime，在 Vue 实例化的时候会被监听 setter 和 getter。也就是说，在 template 中使用了 remainTime，这时 getter 操作会将 remainTime 记录为 template 的依赖；而在脚本改变 remainTime 值时（setInterval），setter 操作发起通知，vue 接收到通知，便根据 getter 收集到的依赖树，通知相应的依赖更新，再触发 template 的重新渲染。
 
 ## 例子 2
 
@@ -164,54 +152,54 @@
    import judge from "./components/judge";
 
    export default {
-     name: "match",
-     data() {
-       return {
-         state: "stopped", // running | stopped | runningOut
-         judgeOrder: "stop", //start | stop
-         totalTime: 60,
-         remainTime: 60,
-         timer: null
-       };
-     },
-     methods: {
-       assignTime(time) {
-         this.remainTime = time;
+       name: "match",
+       data() {
+           return {
+               state: "stopped", // running | stopped | runningOut
+               judgeOrder: "stop", //start | stop
+               totalTime: 60,
+               remainTime: 60,
+               timer: null
+           };
        },
-       matchControl(state) {
-         this.judgeOrder = state;
+       methods: {
+           assignTime(time) {
+               this.remainTime = time;
+           },
+           matchControl(state) {
+               this.judgeOrder = state;
+           },
+           stopCounting() {
+               clearInterval(this.timer);
+           },
+           startCounting() {
+               this.timer = setInterval(() => {
+                   this.remainTime--;
+               }, 1000);
+           }
        },
-       stopCounting() {
-         clearInterval(this.timer);
+       watch: {
+           judgeOrder(val) {
+               // val为judgeOrder目前的值
+               // 监听judgeOrder的变化，并且可以在变化时做一些事情...
+               if (val === "start" && this.state === "stopped") {
+                   this.startCounting();
+               }
+               if (val === "stop" && this.state === "running") {
+                   this.stopCounting();
+               }
+           },
+           remainTime(val) {
+               if (val === 0) {
+                   this.stopCounting();
+               }
+           }
        },
-       startCounting() {
-         this.timer = setInterval(() => {
-           this.remainTime--;
-         }, 1000);
+       components: {
+           // 在该组件中，注册子组件
+           countingDown,
+           judge
        }
-     },
-     watch: {
-       judgeOrder(val) {
-         // val为judgeOrder目前的值
-         // 监听judgeOrder的变化，并且可以在变化时做一些事情...
-         if (val === "start" && this.state === "stopped") {
-           this.startCounting();
-         }
-         if (val === "stop" && this.state === "running") {
-           this.stopCounting();
-         }
-       },
-       remainTime(val) {
-         if (val === 0) {
-           this.stopCounting();
-         }
-       }
-     },
-     components: {
-       // 在该组件中，注册子组件
-       countingDown,
-       judge
-     }
    };
    ```
 
@@ -234,20 +222,20 @@
 
    ```js
    export default {
-     name: "judge",
-     data() {
-       return {
-         message: ""
-       };
-     },
-     methods: {
-       assignTime(time) {
-         this.$emit("assignTime", time);
+       name: "judge",
+       data() {
+           return {
+               message: ""
+           };
        },
-       controlBtnClick(state) {
-         this.$emit("matchControl", state);
+       methods: {
+           assignTime(time) {
+               this.$emit("assignTime", time);
+           },
+           controlBtnClick(state) {
+               this.$emit("matchControl", state);
+           }
        }
-     }
    };
    ```
 
@@ -266,10 +254,10 @@
 
    ```js
    export default {
-     name: "countingDown",
-     data() {
-       return {};
-     },
-     props: ["totalTime", "remainTime", "matchState"] //从父组件传过来的值
+       name: "countingDown",
+       data() {
+           return {};
+       },
+       props: ["totalTime", "remainTime", "matchState"] //从父组件传过来的值
    };
    ```
