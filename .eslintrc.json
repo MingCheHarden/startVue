@@ -1,0 +1,26 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "parser": "babel-eslint",
+    "plugins": ["html"],
+    "extends": ["eslint:recommended"],
+    "rules": {
+        "indent": ["warn", 4, { "SwitchCase": 1 }],
+        "semi": ["warn", "always"],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+
+        //es6
+        "prefer-template": "warn",
+        "no-const-assign": "error",
+        "prefer-rest-params": "warn",
+        "no-duplicate-imports": ["error", { "includeExports": true }],
+        "no-var": "warn"
+    }
+}

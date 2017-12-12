@@ -1,10 +1,10 @@
-import Vue from 'vue'
-import App from './countingDown.vue'
+import Vue from "vue";
+import App from "./countingDown.vue";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  render: h => h(App)
-})
+    el: "#app",
+    render: h => h(App)
+});

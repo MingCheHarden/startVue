@@ -100,6 +100,8 @@
 
    data 中的 remainTime，在 Vue 实例化的时候会被监听 setter 和 getter。也就是说，在 template 中使用了 remainTime，这时 getter 操作会将 remainTime 记录为 template 的依赖；而在脚本改变 remainTime 值时（setInterval），setter 操作发起通知，vue 接收到通知，便根据 getter 收集到的依赖树，通知相应的依赖更新，再触发 template 的重新渲染。
 
+   ![vue响应式原理](/static/data.png)
+
 ## 例子 2
 
 1. 描述：
@@ -127,7 +129,7 @@
 
         当父组件的属性变化时，将传导给子组件，但是反过来不会。这是为了防止子组件无意间修改了父组件的状态，来避免应用的数据流变得难以理解
 
-   由于裁判需要控制时间的能力，且裁判和倒计时显然没有什么父子联系。 这时比赛剩余时间放在倒计时组件中控制的话，我们就没有什么好办法能让裁判很容易的控制它。所以 remainTime 需要上提到比赛这个父组件中，这时父组件变可通过 v-on 赋予裁判调整比赛剩余时间的权力。
+   由于裁判需要控制时间的能力，且裁判和倒计时显然没有什么父子联系。这时比赛剩余时间放在倒计时组件中控制的话，我们就没有什么好办法能让裁判很容易的控制它。所以 remainTime 需要上提到比赛这个父组件中，这时父组件变可通过 v-on 赋予裁判调整比赛剩余时间的权力。
 
    ![数据流动](/static/model-flow.jpeg)
 
@@ -273,8 +275,34 @@
    };
    ```
 
-## 高阶
+## More
 
 1. [状态管理](https://cn.vuejs.org/v2/guide/state-management.html)
 
    Vuex
+
+   由于多个状态分散的跨越在许多组件和交互间各个角落，大型应用复杂度也经常逐渐增长。为了解决这个问题，Vue 提供 vuex
+
+   ![state](/static/state.png)
+
+2. 配置开发工具
+
+   以 [vscode](https://code.visualstudio.com/) 为例
+
+   推荐安装插件 Vetur
+
+   格式化工具 Prettier
+
+   语法检查 eslint
+
+3. [webpack](https://webpack.js.org/)
+
+   前端打包工具。 weex 中 JS Bundle 的形成就靠它。
+
+   将通过自定义配置文件，将你写的源码编译组合成你想要的样子。
+
+   在当前项目目录运行下面的命令行，webpack 根据配置文件  将源码打包为可以上线的最终版本(解析.vue 文件，抽离成 js css 文件；压缩混淆 js 代码；ES6 代码降级成 ES5 等等)。
+
+   ```bash
+    npm run build
+   ```
